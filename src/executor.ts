@@ -58,6 +58,10 @@ export class Executor {
         return this.client.query(new QueryStream(query.parametrisedQuery, params))
     }
 
+    public async executeFile<T>(path: string) {
+        return this.executeString<never, T>(await fs.promises.readFile(path, 'utf8'))
+    }
+
     /**
      * Executes a query defined by a NamedQuery
      */
