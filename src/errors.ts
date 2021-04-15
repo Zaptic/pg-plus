@@ -1,5 +1,11 @@
 import type { QueryResult } from 'pg'
-import { extendedPromise, ObjectArrayPromise, ObjectArrayResultPromise, Result, ResultPromise } from '@zaptic-external/ts-monads'
+import {
+    extendedPromise,
+    ObjectArrayPromise,
+    ObjectArrayResultPromise,
+    Result,
+    ResultPromise,
+} from '@zaptic-external/ts-monads'
 
 export type DBError = Error & {
     name: string
