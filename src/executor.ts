@@ -2,6 +2,7 @@ import * as fs from 'fs'
 import type { PoolClient } from 'pg'
 import { TypedQuery } from './typedQuery'
 import { DBError, DBResultPromise } from './errors'
+import { hashStringToInt } from './helpers'
 
 export class Executor {
     public client: PoolClient
@@ -22,6 +23,12 @@ export class Executor {
 
     public begin() {
         return this.executeString('BEGIN')
+    }
+
+    public getTransactionLock(lockName: string) {
+        return this.executeString<[number], { lock: boolean }>(`SELECT pg_advisory_xact_lock($1) "lock"`, [
+            hashStringToInt(lockName),
+        ])
     }
 
     /**
@@ -53,14 +60,14 @@ export class Executor {
         return this.executeString(query.parametrisedQuery, query.getParameterArray(data))
     }
 
-    public executeString<T = never, R = never>(query: string, data?: T[]): DBResultPromise<R> {
+    public executeString<T extends Array<any> = never, R = never>(query: string, data?: T): DBResultPromise<R> {
         if (this.closed) throw new Error(this.closedError)
 
         if (process.env.ZORM_LOG_QUERIES === 'true') {
             fs.appendFileSync('./query.log', `\n${JSON.stringify({ query, data })},`)
         }
 
-        const promise = this.client.query<R, T[]>(query, data).catch((error: DBError) => {
+        const promise = this.client.query<R, T>(query, data).catch((error: DBError) => {
             error.query = query
             error.queryData = data
             return Promise.reject(error)
