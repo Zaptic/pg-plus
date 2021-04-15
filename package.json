@@ -1,0 +1,28 @@
+{
+    "name": "@zaptic-external/pg-plus",
+    "version": "1.0.0",
+    "description": "PG plus - a node-pg wrapper",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "license": "MIT",
+    "repository": "https://github.com/Zaptic/ts-monads",
+    "scripts": {
+        "prettier": "prettier --config prettier.config.js '**' --write",
+        "test": "mocha --colors --require source-map-support/register --ui bdd $(find dist/ -name '*.test.js')",
+        "tsc": "tsc"
+    },
+    "dependencies": {
+        "@zaptic-external/ts-monads": "^1.1.1",
+        "lodash.memoize": "4.1.2",
+        "pg": "8.5.1"
+    },
+    "devDependencies": {
+        "@types/lodash.memoize": "4.1.6",
+        "@types/pg": "7.14.11",
+        "prettier": "2.2.1",
+        "typescript": "4.2.3",
+        "mocha": "^8.3.2",
+        "chai": "^4.3.4",
+        "source-map-support": "^0.5.19"
+    }
+}

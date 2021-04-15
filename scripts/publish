@@ -1,0 +1,6 @@
+#!/bin/bash
+
+npm run tsc
+npm run prettier
+npm version "$1"
+npm publish --access=public
