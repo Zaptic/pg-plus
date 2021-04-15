@@ -62,7 +62,6 @@ export class Executor {
         return this.executeString<never, T>(await fs.promises.readFile(path, 'utf8'))
     }
 
-
     public disableTrigger(tableName: string, triggerName: string) {
         return this.executeString(`ALTER TABLE ${tableName} DISABLE TRIGGER ${triggerName}`)
     }
