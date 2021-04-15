@@ -1,5 +1,6 @@
 import * as fs from 'fs'
 import type { PoolClient } from 'pg'
+import QueryStream from 'pg-query-stream'
 import { TypedQuery } from './typedQuery'
 import { DBError, DBResultPromise } from './errors'
 import { hashStringToInt } from './helpers'
@@ -47,6 +48,14 @@ export class Executor {
 
             throw err
         }
+    }
+
+    /**
+     * Executes a query and streams the results - useful when there is a lot of data being returned
+     */
+    public stream<Input extends {}, Output extends {}>(query: TypedQuery<Input, Output>, data?: Input) {
+        const params = data ? query.getParameterArray(data) : undefined
+        return this.client.query(new QueryStream(query.parametrisedQuery, params))
     }
 
     /**
