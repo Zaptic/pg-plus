@@ -7,5 +7,6 @@ export * from './errors'
 export * from './dataTypes/interval'
 export * from './dataTypes/point'
 export * from './dataTypes/range'
+export type { PoolConfig } from 'pg'
 
 setupPostgresTypeOverrides()
