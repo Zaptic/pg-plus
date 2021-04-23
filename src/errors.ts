@@ -39,7 +39,7 @@ export class DBResultPromise<T extends {}> extends ObjectArrayPromise<T> {
         )
     }
 
-    public parseErrors<E>(errorMapping: ParseErrors<E>): ObjectArrayResultPromise<E, T> {
+    public parseErrors<E = string>(errorMapping: ParseErrors<E>): ObjectArrayResultPromise<E, T> {
         const promise = this.then((rows) => Result.ok<T[], E>(rows)).catch((error: DBError) =>
             parseErrors<E, T[]>(errorMapping, error)
         )
