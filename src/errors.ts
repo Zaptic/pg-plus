@@ -47,8 +47,13 @@ export class DBResultPromise<T extends {}> extends ObjectArrayPromise<T> {
     }
 }
 
+type ParseErrorsFunction<E> = (error: DBError) => E
 export type ParseErrors<E> = {
-    [key: string]: E
+    [key: string]: E | ParseErrorsFunction<E>
+}
+
+function isParseErrorFunction<E>(value: E | ParseErrorsFunction<E>): value is ParseErrorsFunction<E> {
+    return typeof value === 'function'
 }
 
 function parseErrors<E, T>(errorMapping: ParseErrors<E>, error: DBError): Result<E, T> {
@@ -75,5 +80,6 @@ function parseErrors<E, T>(errorMapping: ParseErrors<E>, error: DBError): Result
     // If we have no message we are not planning for this error so throw
     const messageOrFunction = errorMapping[key]
     if (messageOrFunction === undefined) throw error
+    if (isParseErrorFunction(messageOrFunction)) return Result.err<E, T>(messageOrFunction(error))
     return Result.err<E, T>(messageOrFunction)
 }
