@@ -2,7 +2,7 @@ import * as pg from 'pg'
 import { Executor } from './executor'
 
 export class Pool {
-    private pool: pg.Pool
+    public pool: pg.Pool
 
     public async connect(): Promise<Executor> {
         const client = await this.pool.connect()
