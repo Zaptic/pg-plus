@@ -1,7 +1,7 @@
 import memoize from 'lodash.memoize'
 
 export type Pivotted<T> = {
-    [P in keyof T]: Array<T[P]>
+    [P in keyof T]-?: Array<T[P]>
 }
 
 export function pivotAttributes<T extends {}, K extends keyof T = keyof T>(
