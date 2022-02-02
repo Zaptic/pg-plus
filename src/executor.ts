@@ -14,6 +14,11 @@ export class Executor {
         this.client = client
     }
 
+    public setStatementTimeout(milliseconds: number) {
+        if (!Number.isInteger(milliseconds)) throw new Error('Invalid parameter, timeout must be an integer')
+        return this.executeString(`SET statement_timeout TO ${milliseconds}`)
+    }
+
     public rollback() {
         return this.executeString('ROLLBACK')
     }
