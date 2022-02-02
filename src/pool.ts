@@ -1,12 +1,19 @@
 import * as pg from 'pg'
 import { Executor } from './executor'
 
+export interface Config extends pg.PoolConfig {
+    statementTimeoutInMs?: number
+}
+
 export class Pool {
     public pool: pg.Pool
+    public statementTimeoutInMs: number | null
 
     public async connect(): Promise<Executor> {
         const client = await this.pool.connect()
-        return new Executor(client)
+        const executor = new Executor(client)
+        if (this.statementTimeoutInMs !== null) await executor.setStatementTimeout(this.statementTimeoutInMs)
+        return executor
     }
 
     /**
@@ -17,7 +24,7 @@ export class Pool {
      * If you're planning on making multiple queries use `new Pool(cfg)`
      * This will force cfg.max to 1
      */
-    public static run<T>(cfg: pg.PoolConfig, fn: (database: Executor) => Promise<T>) {
+    public static run<T>(cfg: Config, fn: (database: Executor) => Promise<T>) {
         const pool = new Pool({ ...cfg, max: 1 }) // Force the max to 1 as there is no point making more in this context
         return pool.run(fn).finally(() => pool.close())
     }
@@ -30,13 +37,13 @@ export class Pool {
      * If you're planning on making multiple queries use `new Pool(cfg)`
      * This will force cfg.max to 1
      */
-    public static runInTransaction<T>(cfg: pg.PoolConfig, fn: (database: Executor) => Promise<T>) {
+    public static runInTransaction<T>(cfg: Config, fn: (database: Executor) => Promise<T>) {
         const pool = new Pool({ ...cfg, max: 1 }) // Force the max to 1 as there is no point making more in this context
         return pool.runInTransaction(fn).finally(() => pool.close())
     }
 
-    constructor(cfg: pg.PoolConfig) {
-        // Force ssl
+    constructor(cfg: Config) {
+        this.statementTimeoutInMs = cfg.statementTimeoutInMs ?? null
         this.pool = new pg.Pool({ ...cfg })
         // There is nothing we can really do but log this
         this.pool.on('error', (e) => console.error('[PGPLUS] Connection pool error', e))
