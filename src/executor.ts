@@ -84,7 +84,7 @@ export class Executor {
     public executeString<T extends Array<any> = never, R = never>(query: string, data?: T): DBResultPromise<R> {
         if (this.closed) throw new Error(this.closedError)
 
-        if (process.env.ZORM_LOG_QUERIES === 'true') {
+        if (process.env.PGPLUS_LOG_QUERIES === 'true') {
             fs.appendFileSync('./query.log', `\n${JSON.stringify({ query, data })},`)
         }
 

@@ -39,7 +39,7 @@ export class Pool {
         // Force ssl
         this.pool = new pg.Pool({ ...cfg })
         // There is nothing we can really do but log this
-        this.pool.on('error', (e) => console.error('[ZORM] Connection pool error', e))
+        this.pool.on('error', (e) => console.error('[PGPLUS] Connection pool error', e))
     }
 
     /**
