@@ -1,4 +1,4 @@
-import memoize from 'lodash.memoize'
+import { memoize } from 'lodash'
 
 export type Pivotted<T> = {
     [P in keyof T]-?: Array<T[P]>
