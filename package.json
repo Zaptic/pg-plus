@@ -1,6 +1,6 @@
 {
     "name": "@zaptic-external/pg-plus",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "PG plus - a node-pg wrapper",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
