@@ -12,7 +12,7 @@
         "tsc": "tsc"
     },
     "dependencies": {
-        "@zaptic-external/ts-monads": "1.2.1",
+        "@zaptic-external/ts-monads": "^2.0.0",
         "lodash": "^4.17.21",
         "pg": "8.5.1",
         "pg-query-stream": "4.1.0"
